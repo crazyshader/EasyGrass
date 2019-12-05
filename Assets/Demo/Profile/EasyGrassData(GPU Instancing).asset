@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24a9d24656018e54d9232326b0d86bb7, type: 3}
+  m_Name: EasyGrassData(GPU Instancing)
+  m_EditorClassIdentifier: 
+  InstanceDraw: 1
+  GridSize: 32
+  TerrainPos: {x: -1024, y: 0, z: -1024}
+  TerrainSize: {x: 2048, y: 400, z: 2048}
+  TerrainBounds:
+    m_Center: {x: 1024, y: 150.21669, z: 1024}
+    m_Extent: {x: 1024, y: 150.21669, z: 1024}
+  HeightmapResolution: 2049
+  DetailResolution: 1024
+  DetailMaxDensity: 16
+  HeightmapPath: heightmap.raw
+  NormalMap: {fileID: 2800000, guid: 33b2b1dc68e38d04ba03d4d5a1b8302d, type: 3}
+  DetailMapList:
+  - {fileID: 2800000, guid: fe862737879d4da4a849061b10a1971d, type: 3}
+  - {fileID: 2800000, guid: 16aba7fcb7aad904eb3cdcd64de06b50, type: 3}
+  DetailDataList:
+  - BrushIndex: 0
+    CullDistance: 100
+    ShowDensity: 0.2
+    WidthScale: {x: 0.8, y: 1}
+    HeightScale: {x: 1, y: 1}
+    NoiseSpread: 1
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.3
+    CastShadows: 0
+    ReceiveShadows: 0
+    DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
+    DetailMaterial: {fileID: 2100000, guid: 5d9e3e0224b80214e8eedb3af8f85ce2, type: 2}
+  - BrushIndex: 1
+    CullDistance: 100
+    ShowDensity: 0.5
+    WidthScale: {x: 0.8, y: 1}
+    HeightScale: {x: 1, y: 1}
+    NoiseSpread: 1
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.3
+    CastShadows: 0
+    ReceiveShadows: 0
+    DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
+    DetailMaterial: {fileID: 2100000, guid: 0af5ffef3c30e1a4790c52a03a6491b0, type: 2}
+  - BrushIndex: 2
+    CullDistance: 100
+    ShowDensity: 0.5
+    WidthScale: {x: 0.8, y: 1}
+    HeightScale: {x: 1, y: 1.5}
+    NoiseSpread: 1
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.3
+    CastShadows: 0
+    ReceiveShadows: 0
+    DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
+    DetailMaterial: {fileID: 2100000, guid: f950270b790ff4e44ac12431bda2ef7f, type: 2}
+  - BrushIndex: 3
+    CullDistance: 30
+    ShowDensity: 1
+    WidthScale: {x: 0.8, y: 1}
+    HeightScale: {x: 1, y: 1}
+    NoiseSpread: 1
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.1
+    CastShadows: 0
+    ReceiveShadows: 0
+    DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
+    DetailMaterial: {fileID: 2100000, guid: 5bfd4b951b9c1b74f9039b064c746f0a, type: 2}
+  - BrushIndex: 4
+    CullDistance: 30
+    ShowDensity: 1
+    WidthScale: {x: 0.8, y: 1}
+    HeightScale: {x: 1, y: 1}
+    NoiseSpread: 1
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.1
+    CastShadows: 0
+    ReceiveShadows: 0
+    DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
+    DetailMaterial: {fileID: 2100000, guid: 976cd745b7ede34438f1e0bf9154eab6, type: 2}
