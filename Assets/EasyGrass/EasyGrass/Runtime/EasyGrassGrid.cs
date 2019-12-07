@@ -89,13 +89,13 @@ namespace EasyGrass
                 _massiveGrass.TerrainData.TerrainSize.y);
             return new Vector3(
                 index.x * _cellSize + _cellHalfSize,
-                height,
+                height + _cellHalfSize,
                 index.y * _cellSize + _cellHalfSize) + terrainPos;
         }
 
         private List<CellIndex> InnerSphereIndices(Vector3 cameraPos, float cullDistance)
         {
-            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_massiveGrass.RenderCamera);
+            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_massiveGrass.CurrentCamera);
             var hPos = new Vector2(cameraPos.x, cameraPos.z);
             var rectMinIndex = IndexFromPosition(hPos - Vector2.one * cullDistance);
             var rectMaxIndex = IndexFromPosition(hPos + Vector2.one * cullDistance);
@@ -109,7 +109,7 @@ namespace EasyGrass
                     var index = new CellIndex(x, y);
                     var cellPos = CenterPos3D(index);
                     var direction = cellPos - cameraPos;
-                    var bounds = new Bounds(cellPos, new Vector3(_cellSize, 2f, _cellSize));
+                    var bounds = new Bounds(cellPos, new Vector3(_cellSize, _cellSize, _cellSize));
                     if (direction.magnitude <= cullDistance && GeometryUtility.TestPlanesAABB(planes, bounds))
                         indexList.Add(index);
                 }

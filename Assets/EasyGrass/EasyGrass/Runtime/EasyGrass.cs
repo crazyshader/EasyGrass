@@ -7,6 +7,8 @@ namespace EasyGrass
     //[ExecuteInEditMode]
     public class EasyGrass : MonoBehaviour, IDisposable
     {
+        public static EasyGrass Instance { get; private set; }
+
         private EasyGrassRenderer[] _easyGrassRenderer = default;
 
         //[SerializeField] private Terrain _unityTerrain = default;
@@ -16,15 +18,22 @@ namespace EasyGrass
         //    set => _unityTerrain = value;
         //}
 
-        [SerializeField] private Camera _renderCamera = default;
-        public Camera RenderCamera
+        [SerializeField] private Camera _currentCamera = default;
+        public Camera CurrentCamera
         {
-            get => _renderCamera;
+            get
+            {
+                if (_currentCamera == null)
+                {
+                    _currentCamera = Camera.main;
+                }
+                return _currentCamera;
+            }
             set
             {
-                if (_renderCamera != value)
+                if (_currentCamera != value)
                 {
-                    _renderCamera = value;
+                    _currentCamera = value;
                 }
             }
         }
@@ -34,6 +43,12 @@ namespace EasyGrass
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            Instance = this;
+
             var heightmapPath = Path.Combine(Application.streamingAssetsPath, _unityTerrainData.HeightmapPath);
             EasyGrassUtility.LoadHeightmap(heightmapPath, _unityTerrainData.HeightmapResolution, _unityTerrainData.HeightmapResolution);
             //MassiveGrassUtility.LoadHeightmap(_unityTerrainData.HeightMap);
@@ -59,24 +74,24 @@ namespace EasyGrass
 
         private void Update()
         {
-            if (this.isActiveAndEnabled && _easyGrassRenderer != null)
+            var camera = CurrentCamera;
+            if (camera == null)
+                return;
+            if (!this.isActiveAndEnabled)
+                return;
+
+            var rendererCount = _easyGrassRenderer.Length;
+            if (camera.transform.hasChanged)
             {
-                var rendererCount = _easyGrassRenderer.Length;
-                if (RenderCamera != null)
-                {
-                    if (RenderCamera.transform.hasChanged)
-                    {
-                        for (int i = 0; i < rendererCount; ++i)
-                        {
-                            _easyGrassRenderer[i].OnBuild();
-                        }
-                        RenderCamera.transform.hasChanged = false;
-                    }
-                }
                 for (int i = 0; i < rendererCount; ++i)
                 {
-                    _easyGrassRenderer[i].OnRender();
+                    _easyGrassRenderer[i].OnBuild();
                 }
+                camera.transform.hasChanged = false;
+            }
+            for (int i = 0; i < rendererCount; ++i)
+            {
+                _easyGrassRenderer[i].OnRender();
             }
         }
     }

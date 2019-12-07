@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AlphaClip: 0.79
+    - _AlphaClip: 0.5
     - _BumpScale: 1
     - _Cutoff: 0.874
     - _DetailNormalMapScale: 1
@@ -74,14 +74,15 @@ Material:
     - _Mode: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ShowRange: 150
+    - _ShowRange: 60
+    - _SizeScale: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaveAmp: 1
-    - _WaveSpeed: 1
-    - _WindSpeed: 6.3
+    - _WaveAmp: 0.4
+    - _WaveSpeed: 2
+    - _WindSpeed: 5
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.41154185, g: 0.735849, b: 0.24644002, a: 1}

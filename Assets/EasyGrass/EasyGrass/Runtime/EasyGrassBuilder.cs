@@ -59,6 +59,7 @@ namespace EasyGrass
         private Vector2 _pixelToTerrain;
         private Vector2 _terrainToPixel;
         private Color[][] _detailDensity;
+        private Mesh _defaultQuad;
 
         static EasyGrassBuilder()
         {
@@ -100,6 +101,11 @@ namespace EasyGrass
             }
         }
 
+        private float EaseIn_Exponential(float t)
+        {
+            return t == 0f ? 0f : Mathf.Pow(1024f, t - 1f);
+        }
+
         private List<Tuple<Vector2,int>> GetPositionList(Rect cellRect)
         {
             var terrainXZPos = new Vector2(_terrainPos.x, _terrainPos.z);
@@ -107,7 +113,7 @@ namespace EasyGrass
             var localNormalizedRect = new Rect(localRect.position * _terrainToPixel, localRect.size * _terrainToPixel);
 
             float density = 0;
-            var cameraPos = _easyGrass.RenderCamera.transform.position;
+            var cameraPos = _easyGrass.CurrentCamera.transform.position;
             List<Tuple<Vector2, int>> positionList = new List<Tuple<Vector2, int>>(1023);
             for (float pixelX = localNormalizedRect.min.x; pixelX < localNormalizedRect.max.x; pixelX += 1f)
             {
@@ -143,7 +149,8 @@ namespace EasyGrass
                             _easyGrass.TerrainData.TerrainSize.y);
                         var worldPos = _terrainPos + new Vector3(position.x, height + _unityDetailData.HeightOffset, position.y);
                         var direction = worldPos - cameraPos;
-                        var linearDensity = 1.0f - Mathf.Clamp01(direction.magnitude / _unityDetailData.CullDistance);
+                        //var linearDensity = 1.0f - Mathf.Clamp01(direction.magnitude / _unityDetailData.CullDistance);
+                        var linearDensity = 1.0f - EaseIn_Exponential(Mathf.Clamp01(direction.magnitude / _unityDetailData.CullDistance));
 
                         int instanceCount = Mathf.CeilToInt(density * linearDensity * _unityDetailData.ShowDensity * _unityTerrainData.DetailMaxDensity);
                         if (instanceCount > 0)
@@ -156,10 +163,60 @@ namespace EasyGrass
 
             return positionList;
         }
+        
+        public void DestoryQuad()
+        {
+            if (Application.isPlaying)
+                UnityEngine.Object.Destroy(_defaultQuad);
+            else
+                UnityEngine.Object.DestroyImmediate(_defaultQuad);
+            _defaultQuad = null;
+        }
+
+        public Mesh BuildQuad()
+        {
+            if (_defaultQuad != null)
+                return _defaultQuad;
+
+            float width = 1;
+            float height = 1;
+            //var color = Color.black;
+            var meshData = new MeshData(1, 2);
+            meshData.vertices[0] = new Vector3(-width * 0.5f, height, 0);
+            meshData.vertices[1] = new Vector3(width * 0.5f, height, 0);
+            meshData.vertices[2] = new Vector3(width * 0.5f, 0, 0);
+            meshData.vertices[3] = new Vector3(-width * 0.5f, 0, 0);
+            meshData.normals[0] = Vector3.up;
+            meshData.normals[1] = Vector3.up;
+            meshData.normals[2] = Vector3.forward;
+            meshData.normals[3] = Vector3.forward;
+            meshData.uvs[0] = new Vector4(0f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+            meshData.uvs[1] = new Vector4(1f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+            meshData.uvs[2] = new Vector4(1f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+            meshData.uvs[3] = new Vector4(0f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+            //meshData.colors[0] = color;
+            //meshData.colors[1] = color;
+            //meshData.colors[2] = color;
+            //meshData.colors[3] = color;
+            meshData.triangles[0] = 0;
+            meshData.triangles[1] = 1;
+            meshData.triangles[2] = 2;
+            meshData.triangles[3] = 2;
+            meshData.triangles[4] = 3;
+            meshData.triangles[5] = 0;
+
+            _defaultQuad = new Mesh();
+            _defaultQuad.vertices = meshData.vertices;
+            _defaultQuad.normals = meshData.normals;
+            _defaultQuad.triangles = meshData.triangles;
+            //mesh.colors = meshData.colors;
+            _defaultQuad.SetUVs(0, meshData.uvs);
+            return _defaultQuad;
+        }
 
         public Mesh BuildMesh(List<Element> cellEmentList)
         {
-            var cameraDir = _easyGrass.RenderCamera.transform.forward;
+            var cameraDir = _easyGrass.CurrentCamera.transform.forward;
             cameraDir.y = 0;
             Quaternion camRotation = Quaternion.LookRotation(cameraDir);
             var elementCout = cellEmentList.Count;

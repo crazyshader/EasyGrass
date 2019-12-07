@@ -32,26 +32,26 @@ namespace EasyGrass
         private Dictionary<EasyGrassGrid.CellIndex, Request> _requestQueue
             = new Dictionary<EasyGrassGrid.CellIndex, Request>();
 
-        private EasyGrass _massiveGrass;
-        private GrassDetailData _unityDetailData;
-        private EasyGrassGrid _grassGrid;
-        private EasyGrassBuilder massiveBuilder;
+        private EasyGrass _easyGrass;
+        private GrassDetailData _grassDetailData;
+        private EasyGrassGrid _easyGrassGrid;
+        private EasyGrassBuilder _easyGrassBuilder;
         private const int _maxInstancePerPatch = 1022;
         private const int _maxElementPerPatch = 2048;
         private List<Mesh> _renderMeshList = new List<Mesh>();      
 
         public EasyGrassRenderer(int detailIndex, EasyGrass massiveGrass)
         {
-            _massiveGrass = massiveGrass;
-            _unityDetailData = massiveGrass.TerrainData.DetailDataList[detailIndex];
-            _grassGrid = new EasyGrassGrid(massiveGrass, 
+            _easyGrass = massiveGrass;
+            _grassDetailData = massiveGrass.TerrainData.DetailDataList[detailIndex];
+            _easyGrassGrid = new EasyGrassGrid(massiveGrass, 
                 Mathf.CeilToInt(massiveGrass.TerrainData.TerrainSize.x / Mathf.Min(32, massiveGrass.TerrainData.GridSize)));
-            massiveBuilder = new EasyGrassBuilder(massiveGrass, massiveGrass.TerrainData.DetailDataList[detailIndex]);
+            _easyGrassBuilder = new EasyGrassBuilder(massiveGrass, massiveGrass.TerrainData.DetailDataList[detailIndex]);
         }
 
         public void OnRender()
         {
-            if (_massiveGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.TerrainData.InstanceDraw)
             {
                 if (_cellInstanceList.Count == 0) return;
                 _instanceList.Clear();
@@ -65,23 +65,24 @@ namespace EasyGrass
                     var endIndex = Mathf.Min(beginIndex + _maxInstancePerPatch, length - 1);
                     var instanceCount = endIndex - beginIndex + 1;
                     var cellInstance = _instanceList.GetRange(beginIndex, instanceCount);
-                    Graphics.DrawMeshInstanced(_unityDetailData.DetailMesh,
+                    Graphics.DrawMeshInstanced(
+                        _grassDetailData.UseQuad ? _easyGrassBuilder.BuildQuad() : _grassDetailData.DetailMesh,
                         0,
-                        _unityDetailData.DetailMaterial,
+                        _grassDetailData.DetailMaterial,
                         cellInstance.ToArray(),
                         instanceCount,
                         null,
-                        _unityDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
-                        _unityDetailData.ReceiveShadows,
-                        _unityDetailData.DetailLayer);
+                        _grassDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
+                        _grassDetailData.ReceiveShadows,
+                        _grassDetailData.DetailLayer);
                 }
             }
             else
             {
-                if (_massiveGrass.RenderCamera.transform.hasChanged)
+                if (_easyGrass.CurrentCamera.transform.hasChanged)
                 {
                     BuildMesh();
-                    _massiveGrass.RenderCamera.transform.hasChanged = false;
+                    _easyGrass.CurrentCamera.transform.hasChanged = false;
                 }
 
                 foreach (var mesh in _renderMeshList)
@@ -90,13 +91,13 @@ namespace EasyGrass
                         mesh,
                         Vector3.zero,
                         Quaternion.identity,
-                        _unityDetailData.DetailMaterial,
-                        _unityDetailData.DetailLayer,
+                        _grassDetailData.DetailMaterial,
+                        _grassDetailData.DetailLayer,
                         null,
                         0,
                         null,
-                        _unityDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
-                        _unityDetailData.ReceiveShadows);
+                        _grassDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
+                        _grassDetailData.ReceiveShadows);
                 }
             }
         }
@@ -120,38 +121,38 @@ namespace EasyGrass
                 var endIndex = Mathf.Min(beginIndex + _maxElementPerPatch, length - 1);
                 var elementCount = endIndex - beginIndex + 1;
                 var cellEmentList = _elementList.GetRange(beginIndex, elementCount);
-                var mesh = massiveBuilder.BuildMesh(cellEmentList);
+                var mesh = _easyGrassBuilder.BuildMesh(cellEmentList);
                 _renderMeshList.Add(mesh);
                 Graphics.DrawMesh(
                     mesh,
                     Vector3.zero,
                     Quaternion.identity,
-                    _unityDetailData.DetailMaterial,
-                    _unityDetailData.DetailLayer,
+                    _grassDetailData.DetailMaterial,
+                    _grassDetailData.DetailLayer,
                     null,
                     0,
                     null,
-                    _unityDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
-                    _unityDetailData.ReceiveShadows);
+                    _grassDetailData.CastShadows ? ShadowCastingMode.On : ShadowCastingMode.Off,
+                    _grassDetailData.ReceiveShadows);
             }
         }
 
         public async void OnBuild()
         {
-            await _grassGrid.OnBuild(_massiveGrass.RenderCamera.transform.position, _unityDetailData.CullDistance, this);
+            await _easyGrassGrid.OnBuild(_easyGrass.CurrentCamera.transform.position, _grassDetailData.CullDistance, this);
         }
 
         private async Task ProcessQueue()
         {
             while (_requestQueue.Count > 0)
             {
-                //var processSize = Mathf.Min(50, Mathf.CeilToInt(_requestQueue.Count));
-                var processSize = Mathf.Max(1, Mathf.CeilToInt(_requestQueue.Count));
-                var tasks = _requestQueue.Take(processSize).Select(x => Build(x.Key));
+                //var processSize = Mathf.Min(1, Mathf.CeilToInt(_requestQueue.Count));
+                //var tasks = _requestQueue.Take(processSize).Select(x => Build(x.Key));
+                var tasks = _requestQueue.Take(1).Select(x => Build(x.Key));
                 await Task.WhenAll(tasks);
             }
 
-            if (!_massiveGrass.TerrainData.InstanceDraw)
+            if (!_easyGrass.TerrainData.InstanceDraw)
             {
                 BuildMesh();
             }
@@ -159,10 +160,10 @@ namespace EasyGrass
 
         private async Task Build(EasyGrassGrid.CellIndex index)
         {
-            if (_massiveGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.TerrainData.InstanceDraw)
             {
                 var cellRect = _requestQueue[index].rect;
-                var instanceMatrixList = await massiveBuilder.BuildInstance(cellRect);
+                var instanceMatrixList = await _easyGrassBuilder.BuildInstance(cellRect);
                 if (!_activeIndices.Contains(index))
                 {
                     if (_requestQueue.ContainsKey(index))
@@ -179,7 +180,7 @@ namespace EasyGrass
             else
             {
                 var cellRect = _requestQueue[index].rect;
-                var elementList = await massiveBuilder.BuildElement(cellRect);
+                var elementList = await _easyGrassBuilder.BuildElement(cellRect);
                 if (!_activeIndices.Contains(index))
                 {
                     if (_requestQueue.ContainsKey(index))
@@ -198,6 +199,7 @@ namespace EasyGrass
 
         private void SafeDestroy(Mesh mesh)
         {
+            _easyGrassBuilder.DestoryQuad();
             if (Application.isPlaying)
                 UnityEngine.Object.Destroy(mesh);
             else
@@ -208,7 +210,7 @@ namespace EasyGrass
         {
             _activeIndices.Clear();
             _requestQueue.Clear();
-            if (_massiveGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.TerrainData.InstanceDraw)
             {
                 _cellInstanceList.Clear();
             }
@@ -230,7 +232,7 @@ namespace EasyGrass
             if (!_requestQueue.ContainsKey(index))
             {
                 _requestQueue[index] = (new Request(index, rect));
-                if (_requestQueue.Count == 1)
+                if (_requestQueue.Count <= 1)
                     ProcessQueue();
             }
         }
@@ -240,7 +242,7 @@ namespace EasyGrass
         {
             if (!_activeIndices.Contains(index)) return;
 
-            if (_massiveGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.TerrainData.InstanceDraw)
             {
                 if (_cellInstanceList.ContainsKey(index))
                 {

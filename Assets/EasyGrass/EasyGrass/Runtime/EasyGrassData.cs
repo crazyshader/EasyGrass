@@ -20,6 +20,7 @@ namespace EasyGrass
         [SerializeField] public float DetailThreshold;
         [SerializeField] public bool CastShadows;
         [SerializeField] public bool ReceiveShadows;
+        [SerializeField] public bool UseQuad;
         [SerializeField] public Mesh DetailMesh;
         [SerializeField] public Material DetailMaterial;
     }

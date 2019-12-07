@@ -15,6 +15,7 @@
 		[NoScaleOffset] _WindTex("Wind Texture", 2D) = "white" {}
 		//_WorldPosition("World Position", vector) = (0, 0, 0, 1)
         //_WorldSize("World Size", vector) = (1, 1, 1, 1)
+		_SizeScale("Size Scale", Range(0.1, 3)) = 1.0
 
     }
     SubShader
@@ -26,14 +27,14 @@
         {
 			Name "FORWARD"
 			Tags { "LightMode"="ForwardBase" }
-			cull back
+			cull off
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fog
 			#pragma multi_compile_instancing
-			//#pragma instancing_options forcemaxcount:513
+			#pragma instancing_options forcemaxcount:512
 
             #include "UnityCG.cginc"
 
@@ -51,7 +52,7 @@
                 float4 uv : TEXCOORD0;
 				float4 worldPos : TEXCOORD1;
 				float3 normal : NORMAL;
-                UNITY_FOG_COORDS(1)
+                UNITY_FOG_COORDS(2)
                 float4 vertex : SV_POSITION;
             };
 
@@ -71,6 +72,7 @@
             float _WindSpeed;
 			float4 _LightColor0;
 			float _ShowRange;
+			float _SizeScale;
 
             v2f vert (appdata v)
             {
@@ -97,7 +99,7 @@
 
 				float3 eyePos = UnityObjectToViewPos(float4(0.0, 0.0, 0.0, 1.0));
 				float4 viewPos = float4(eyePos.xyz, 1.0)
-					+ float4(vertex.x, vertex.y, 0.0, 0.0);
+					+ float4(vertex.x * _SizeScale, vertex.y * _SizeScale, 0.0, 0.0);
 				o.vertex = mul(UNITY_MATRIX_P, viewPos);
 				o.worldPos = mul(UNITY_MATRIX_I_V, viewPos);
 				o.normal = normalize(mul(float4(v.normal, 0.0), unity_WorldToObject).xyz);
@@ -118,8 +120,9 @@
 				float fade = smoothstep(_ShowRange * 0.5, _ShowRange * 0.8, dist);
 				clip(col.a - lerp(_AlphaClip, 1.0, fade));
 
+				fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.rgb;
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-				float ndl = dot(i.normal, lightDir) * 0.5 + 0.5;
+				float ndl = dot(normalize(i.normal), lightDir) * 0.5 + 0.5;
 				float3 finalColor = col.rgb * _LightColor0.rgb * ndl;
 
 				UNITY_APPLY_FOG(i.fogCoord, finalColor);

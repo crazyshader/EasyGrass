@@ -29,67 +29,72 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 16aba7fcb7aad904eb3cdcd64de06b50, type: 3}
   DetailDataList:
   - BrushIndex: 0
-    CullDistance: 100
-    ShowDensity: 0.2
-    WidthScale: {x: 0.8, y: 1}
+    CullDistance: 112
+    ShowDensity: 0.8
+    WidthScale: {x: 1, y: 1}
     HeightScale: {x: 1, y: 1}
-    NoiseSpread: 1
+    NoiseSpread: 0.1
     HeightOffset: 0
     DetailLayer: 0
-    DetailThreshold: 0.3
+    DetailThreshold: 0.1
     CastShadows: 0
     ReceiveShadows: 0
+    UseQuad: 0
     DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
     DetailMaterial: {fileID: 2100000, guid: 5d9e3e0224b80214e8eedb3af8f85ce2, type: 2}
   - BrushIndex: 1
-    CullDistance: 100
-    ShowDensity: 0.5
-    WidthScale: {x: 0.8, y: 1}
+    CullDistance: 112
+    ShowDensity: 0.8
+    WidthScale: {x: 1, y: 1}
     HeightScale: {x: 1, y: 1}
-    NoiseSpread: 1
+    NoiseSpread: 0.1
     HeightOffset: 0
     DetailLayer: 0
-    DetailThreshold: 0.3
+    DetailThreshold: 0.1
     CastShadows: 0
     ReceiveShadows: 0
+    UseQuad: 0
     DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
     DetailMaterial: {fileID: 2100000, guid: 0af5ffef3c30e1a4790c52a03a6491b0, type: 2}
   - BrushIndex: 2
-    CullDistance: 100
-    ShowDensity: 0.5
-    WidthScale: {x: 0.8, y: 1}
-    HeightScale: {x: 1, y: 1.5}
-    NoiseSpread: 1
+    CullDistance: 112
+    ShowDensity: 0.8
+    WidthScale: {x: 1, y: 1}
+    HeightScale: {x: 1, y: 1}
+    NoiseSpread: 0.1
     HeightOffset: 0
     DetailLayer: 0
-    DetailThreshold: 0.3
+    DetailThreshold: 0.1
     CastShadows: 0
     ReceiveShadows: 0
+    UseQuad: 0
     DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
     DetailMaterial: {fileID: 2100000, guid: f950270b790ff4e44ac12431bda2ef7f, type: 2}
   - BrushIndex: 3
-    CullDistance: 30
-    ShowDensity: 1
-    WidthScale: {x: 0.8, y: 1}
+    CullDistance: 60
+    ShowDensity: 0.6
+    WidthScale: {x: 1, y: 1}
     HeightScale: {x: 1, y: 1}
-    NoiseSpread: 1
+    NoiseSpread: 0.1
     HeightOffset: 0
     DetailLayer: 0
-    DetailThreshold: 0.1
+    DetailThreshold: 0.2
     CastShadows: 0
     ReceiveShadows: 0
+    UseQuad: 1
     DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
     DetailMaterial: {fileID: 2100000, guid: 5bfd4b951b9c1b74f9039b064c746f0a, type: 2}
   - BrushIndex: 4
-    CullDistance: 30
-    ShowDensity: 1
-    WidthScale: {x: 0.8, y: 1}
+    CullDistance: 60
+    ShowDensity: 0.6
+    WidthScale: {x: 1, y: 1}
     HeightScale: {x: 1, y: 1}
-    NoiseSpread: 1
+    NoiseSpread: 0.1
     HeightOffset: 0
     DetailLayer: 0
-    DetailThreshold: 0.1
+    DetailThreshold: 0.2
     CastShadows: 0
     ReceiveShadows: 0
+    UseQuad: 1
     DetailMesh: {fileID: 4300000, guid: 38695b293c9425242ad10debf1b82439, type: 3}
     DetailMaterial: {fileID: 2100000, guid: 976cd745b7ede34438f1e0bf9154eab6, type: 2}
