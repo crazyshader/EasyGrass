@@ -8,7 +8,6 @@ namespace EasyGrass
     public class EasyGrass : MonoBehaviour, IDisposable
     {
         public static EasyGrass Instance { get; private set; }
-
         private EasyGrassRenderer[] _easyGrassRenderer = default;
 
         //[SerializeField] private Terrain _unityTerrain = default;
@@ -38,8 +37,8 @@ namespace EasyGrass
             }
         }
 
-        [SerializeField] private EasyGrassData _unityTerrainData = default;
-        public EasyGrassData TerrainData => _unityTerrainData;
+        [SerializeField] private EasyGrassData _easyGrassData = default;
+        public EasyGrassData GrassData => _easyGrassData;
 
         private void Awake()
         {
@@ -49,12 +48,12 @@ namespace EasyGrass
             }
             Instance = this;
 
-            var heightmapPath = Path.Combine(Application.streamingAssetsPath, _unityTerrainData.HeightmapPath);
-            EasyGrassUtility.LoadHeightmap(heightmapPath, _unityTerrainData.HeightmapResolution, _unityTerrainData.HeightmapResolution);
-            //MassiveGrassUtility.LoadHeightmap(_unityTerrainData.HeightMap);
-            EasyGrassUtility.LoadNormalmap(_unityTerrainData.NormalMap);
+            var heightmapPath = Path.Combine(Application.streamingAssetsPath, _easyGrassData.HeightmapPath);
+            EasyGrassUtility.LoadHeightmap(heightmapPath, _easyGrassData.HeightmapResolution, _easyGrassData.HeightmapResolution);
+            //EasyGrassUtility.LoadHeightmap(_easyGrassData.HeightMap);
+            EasyGrassUtility.LoadNormalmap(_easyGrassData.NormalMap);
 
-            var detailCount = _unityTerrainData.DetailDataList.Count;
+            var detailCount = _easyGrassData.DetailDataList.Count;
             _easyGrassRenderer = new EasyGrassRenderer[detailCount];
             for (int i = 0; i < detailCount; ++i)
             {

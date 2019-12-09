@@ -30,16 +30,16 @@ namespace EasyGrass
         private float _cellSize;
         private float _cellHalfSize;
         private Rect _terrainRect;
-        private EasyGrass _massiveGrass;
+        private EasyGrass _easyGrass;
         private List<CellIndex> _activeIndices = new List<CellIndex>();
 
-        public EasyGrassGrid(EasyGrass massiveGrass, int cellCount)
+        public EasyGrassGrid(EasyGrass easyGrass, int cellCount)
         {
-            _massiveGrass = massiveGrass;
-            var bounds = massiveGrass.TerrainData.TerrainBounds;
+            _easyGrass = easyGrass;
+            var bounds = easyGrass.GrassData.TerrainBounds;
             _terrainRect = new Rect(
-                bounds.min.x + massiveGrass.TerrainData.TerrainPos.x,
-                bounds.min.z + massiveGrass.TerrainData.TerrainPos.z,
+                bounds.min.x + easyGrass.GrassData.TerrainPos.x,
+                bounds.min.z + easyGrass.GrassData.TerrainPos.z,
                 bounds.size.x,
                 bounds.size.z);
 
@@ -80,13 +80,14 @@ namespace EasyGrass
         private Vector3 CenterPos3D(CellIndex index)
         {
             var centerPos2D = CenterPos(index);
-            var terrainPos = _massiveGrass.TerrainData.TerrainPos;
+            var terrainPos = _easyGrass.GrassData.TerrainPos;
             var localPos = centerPos2D - new Vector2(terrainPos.x, terrainPos.z);
             localPos /= _terrainRect.size.x;
-            //var height = _massiveGrass.UnityTerrain.terrainData.GetInterpolatedHeight(localPos.x, localPos.y);
+            //var terrainData = _easyGrass.UnityTerrain.terrainData;
+            //var height = terrainData.GetInterpolatedHeight(localPos.x, localPos.y);
             var height = EasyGrassUtility.GetTerrainHeight( localPos.x, localPos.y, 
-                _massiveGrass.TerrainData.HeightmapResolution, _massiveGrass.TerrainData.HeightmapResolution,
-                _massiveGrass.TerrainData.TerrainSize.y);
+                _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution,
+                _easyGrass.GrassData.TerrainSize.y);
             return new Vector3(
                 index.x * _cellSize + _cellHalfSize,
                 height + _cellHalfSize,
@@ -95,7 +96,7 @@ namespace EasyGrass
 
         private List<CellIndex> InnerSphereIndices(Vector3 cameraPos, float cullDistance)
         {
-            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_massiveGrass.CurrentCamera);
+            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_easyGrass.CurrentCamera);
             var hPos = new Vector2(cameraPos.x, cameraPos.z);
             var rectMinIndex = IndexFromPosition(hPos - Vector2.one * cullDistance);
             var rectMaxIndex = IndexFromPosition(hPos + Vector2.one * cullDistance);

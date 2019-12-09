@@ -29,6 +29,7 @@ namespace EasyGrass
     public class EasyGrassData : ScriptableObject
     {
         [SerializeField] public bool InstanceDraw;
+        [SerializeField] public int MaxCountPerPatch;
         [SerializeField] public int GridSize;
         [SerializeField] public Vector3 TerrainPos;
         [SerializeField] public Vector3 TerrainSize;
@@ -41,6 +42,20 @@ namespace EasyGrass
         [SerializeField] public Texture2D NormalMap;
         [SerializeField] public List<Texture2D> DetailMapList = default;
         [SerializeField] public List<GrassDetailData> DetailDataList = default;
+
+        private void OnValidate()
+        {
+            if (DetailDataList != null)
+            {
+                foreach (var detail in DetailDataList)
+                {
+                    if (detail.DetailMaterial != null)
+                    {
+                        detail.DetailMaterial.enableInstancing = InstanceDraw;
+                    }
+                }
+            }
+        }
     }
 }
 

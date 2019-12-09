@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: grass2
-  m_Shader: {fileID: 4800000, guid: bb8e3ab284cd47742818af8509997f2c, type: 3}
+  m_Name: flower2
+  m_Shader: {fileID: 4800000, guid: d9ad91e62eeb73e4a8fa6f30d483cb5a, type: 3}
   m_ShaderKeywords: _ALPHATEST_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: dfa39156bf1b5cd4cbf86cef449ab66f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 768760f663c4a3b4aa0933442951a95a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -74,7 +74,7 @@ Material:
     - _Mode: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ShowRange: 112
+    - _ShowRange: 60
     - _SizeScale: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -87,7 +87,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.41154185, g: 0.735849, b: 0.24644002, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Tint: {r: 0.05442669, g: 0.4716981, b: 0, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _WindSpeed: {r: 1, g: 1, b: 1, a: 1}
     - _WorldPosition: {r: -1024, g: 0, b: -1024, a: 1}
     - _WorldSize: {r: 2048, g: 400, b: 2048, a: 1}

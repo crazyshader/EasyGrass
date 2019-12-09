@@ -382,7 +382,7 @@ PrefabInstance:
     - target: {fileID: 6643863402601064505, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
         type: 3}
       propertyPath: m_Name
-      value: MassiveGrass(GPU Instancing)
+      value: MassiveGrass
       objectReference: {fileID: 0}
     - target: {fileID: 6643863402601064501, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
         type: 3}
@@ -439,5 +439,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6306231512824258928, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: _currentCamera
+      value: 
+      objectReference: {fileID: 1886675619}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ca51c19c9c29b14ab9e66127e1baaf8, type: 3}

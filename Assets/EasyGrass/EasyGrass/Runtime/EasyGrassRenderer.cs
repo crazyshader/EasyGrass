@@ -37,21 +37,22 @@ namespace EasyGrass
         private EasyGrassGrid _easyGrassGrid;
         private EasyGrassBuilder _easyGrassBuilder;
         private const int _maxInstancePerPatch = 1022;
-        private const int _maxElementPerPatch = 2048;
+        private int _maxElementPerPatch = 2048;
         private List<Mesh> _renderMeshList = new List<Mesh>();      
 
-        public EasyGrassRenderer(int detailIndex, EasyGrass massiveGrass)
+        public EasyGrassRenderer(int detailIndex, EasyGrass easyGrass)
         {
-            _easyGrass = massiveGrass;
-            _grassDetailData = massiveGrass.TerrainData.DetailDataList[detailIndex];
-            _easyGrassGrid = new EasyGrassGrid(massiveGrass, 
-                Mathf.CeilToInt(massiveGrass.TerrainData.TerrainSize.x / Mathf.Min(32, massiveGrass.TerrainData.GridSize)));
-            _easyGrassBuilder = new EasyGrassBuilder(massiveGrass, massiveGrass.TerrainData.DetailDataList[detailIndex]);
+            _easyGrass = easyGrass;
+            _maxElementPerPatch = Mathf.Max(2048, _easyGrass.GrassData.MaxCountPerPatch);
+            _grassDetailData = easyGrass.GrassData.DetailDataList[detailIndex];
+            _easyGrassGrid = new EasyGrassGrid(easyGrass, 
+                Mathf.CeilToInt(easyGrass.GrassData.TerrainSize.x / Mathf.Min(32, easyGrass.GrassData.GridSize)));
+            _easyGrassBuilder = new EasyGrassBuilder(easyGrass, easyGrass.GrassData.DetailDataList[detailIndex]);
         }
 
         public void OnRender()
         {
-            if (_easyGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.GrassData.InstanceDraw)
             {
                 if (_cellInstanceList.Count == 0) return;
                 _instanceList.Clear();
@@ -59,7 +60,7 @@ namespace EasyGrass
                 {
                     _instanceList.AddRange(item.Value);
                 }
-                var length = _instanceList.Count();
+                var length = _instanceList.Count;
                 for (int beginIndex = 0; beginIndex < length; beginIndex = beginIndex + _maxInstancePerPatch)
                 {
                     var endIndex = Mathf.Min(beginIndex + _maxInstancePerPatch, length - 1);
@@ -115,7 +116,7 @@ namespace EasyGrass
             {
                 _elementList.AddRange(item.Value);
             }
-            var length = _elementList.Count();
+            var length = _elementList.Count;
             for (int beginIndex = 0; beginIndex < length; beginIndex = beginIndex + _maxElementPerPatch)
             {
                 var endIndex = Mathf.Min(beginIndex + _maxElementPerPatch, length - 1);
@@ -146,13 +147,13 @@ namespace EasyGrass
         {
             while (_requestQueue.Count > 0)
             {
-                //var processSize = Mathf.Min(1, Mathf.CeilToInt(_requestQueue.Count));
-                //var tasks = _requestQueue.Take(processSize).Select(x => Build(x.Key));
-                var tasks = _requestQueue.Take(1).Select(x => Build(x.Key));
-                await Task.WhenAll(tasks);
+                //var tasks = _requestQueue.Take(1).Select(x => Build(x.Key));
+                //await Task.WhenAll(tasks);
+                var task = Build(_requestQueue.First().Key);
+                await Task.WhenAll(task);
             }
 
-            if (!_easyGrass.TerrainData.InstanceDraw)
+            if (!_easyGrass.GrassData.InstanceDraw)
             {
                 BuildMesh();
             }
@@ -160,7 +161,7 @@ namespace EasyGrass
 
         private async Task Build(EasyGrassGrid.CellIndex index)
         {
-            if (_easyGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.GrassData.InstanceDraw)
             {
                 var cellRect = _requestQueue[index].rect;
                 var instanceMatrixList = await _easyGrassBuilder.BuildInstance(cellRect);
@@ -210,7 +211,7 @@ namespace EasyGrass
         {
             _activeIndices.Clear();
             _requestQueue.Clear();
-            if (_easyGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.GrassData.InstanceDraw)
             {
                 _cellInstanceList.Clear();
             }
@@ -242,7 +243,7 @@ namespace EasyGrass
         {
             if (!_activeIndices.Contains(index)) return;
 
-            if (_easyGrass.TerrainData.InstanceDraw)
+            if (_easyGrass.GrassData.InstanceDraw)
             {
                 if (_cellInstanceList.ContainsKey(index))
                 {

@@ -51,8 +51,8 @@ namespace EasyGrass
     public class EasyGrassBuilder
     {
         private EasyGrass _easyGrass;
-        private GrassDetailData _unityDetailData;
-        private EasyGrassData _unityTerrainData;
+        private GrassDetailData _grassDetailData;
+        private EasyGrassData _grassData;
         private List<Texture2D> _detailMaps;
         private Vector3 _terrainPos;
         private Vector3 _terrainSize;
@@ -69,13 +69,13 @@ namespace EasyGrass
         public EasyGrassBuilder(EasyGrass easyGrass, GrassDetailData unityDetailData)
         {
             _easyGrass = easyGrass;
-            _unityDetailData = unityDetailData;
-            _unityTerrainData = easyGrass.TerrainData;
-            _detailMaps = _unityTerrainData.DetailMapList;
-            _terrainPos = _unityTerrainData.TerrainPos;
-            _terrainSize = _unityTerrainData.TerrainSize;
+            _grassDetailData = unityDetailData;
+            _grassData = easyGrass.GrassData;
+            _detailMaps = _grassData.DetailMapList;
+            _terrainPos = _grassData.TerrainPos;
+            _terrainSize = _grassData.TerrainSize;
 
-            var detailResolution = (float)_unityTerrainData.DetailResolution;
+            var detailResolution = (float)_grassData.DetailResolution;
             _pixelToTerrain = new Vector2(_terrainSize.x / detailResolution, _terrainSize.x / detailResolution);
             _terrainToPixel = new Vector2(detailResolution / _terrainSize.x , detailResolution / _terrainSize.x);
 
@@ -119,9 +119,9 @@ namespace EasyGrass
             {
                 for (float pixelY = localNormalizedRect.min.y; pixelY < localNormalizedRect.max.y; pixelY += 1f)
                 {
-                    var detailMapNumber = (_unityDetailData.BrushIndex % 16) / 4;
-                    var detailChannelNum = _unityDetailData.BrushIndex % 4;
-                    var v = _detailDensity[detailMapNumber][Mathf.RoundToInt(pixelY) * _easyGrass.TerrainData.DetailResolution + Mathf.RoundToInt(pixelX)];
+                    var detailMapNumber = (_grassDetailData.BrushIndex % 16) / 4;
+                    var detailChannelNum = _grassDetailData.BrushIndex % 4;
+                    var v = _detailDensity[detailMapNumber][Mathf.RoundToInt(pixelY) * _easyGrass.GrassData.DetailResolution + Mathf.RoundToInt(pixelX)];
 
                     switch ((TextureChannel)detailChannelNum)
                     {
@@ -138,21 +138,21 @@ namespace EasyGrass
                             density = v.a;
                             break;
                     }
-                    if (density >= _unityDetailData.DetailThreshold)
+                    if (density >= _grassDetailData.DetailThreshold)
                     {
                         Vector2 position = Vector2.Scale(new Vector2(pixelX, pixelY), _pixelToTerrain);
                         var normalizedPos = new Vector2(position.x / _terrainSize.x, position.y / _terrainSize.z);
-                        //var terrainData = _massiveGrass.UnityTerrain.terrainData;
+                        //var terrainData = _easyGrass.UnityTerrain.terrainData;
                         //var height = terrainData.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
                         var height = EasyGrassUtility.GetTerrainHeight(normalizedPos.x, normalizedPos.y,
-                            _easyGrass.TerrainData.HeightmapResolution, _easyGrass.TerrainData.HeightmapResolution,
-                            _easyGrass.TerrainData.TerrainSize.y);
-                        var worldPos = _terrainPos + new Vector3(position.x, height + _unityDetailData.HeightOffset, position.y);
+                            _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution,
+                            _easyGrass.GrassData.TerrainSize.y);
+                        var worldPos = _terrainPos + new Vector3(position.x, height + _grassDetailData.HeightOffset, position.y);
                         var direction = worldPos - cameraPos;
                         //var linearDensity = 1.0f - Mathf.Clamp01(direction.magnitude / _unityDetailData.CullDistance);
-                        var linearDensity = 1.0f - EaseIn_Exponential(Mathf.Clamp01(direction.magnitude / _unityDetailData.CullDistance));
+                        var linearDensity = 1.0f - EaseIn_Exponential(Mathf.Clamp01(direction.magnitude / _grassDetailData.CullDistance));
 
-                        int instanceCount = Mathf.CeilToInt(density * linearDensity * _unityDetailData.ShowDensity * _unityTerrainData.DetailMaxDensity);
+                        int instanceCount = Mathf.CeilToInt(density * linearDensity * _grassDetailData.ShowDensity * _grassData.DetailMaxDensity);
                         if (instanceCount > 0)
                         {
                             positionList.Add(new Tuple<Vector2, int>(position, instanceCount));
@@ -190,10 +190,10 @@ namespace EasyGrass
             meshData.normals[1] = Vector3.up;
             meshData.normals[2] = Vector3.forward;
             meshData.normals[3] = Vector3.forward;
-            meshData.uvs[0] = new Vector4(0f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-            meshData.uvs[1] = new Vector4(1f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-            meshData.uvs[2] = new Vector4(1f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-            meshData.uvs[3] = new Vector4(0f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+            meshData.uvs[0] = new Vector4(0f, 1f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+            meshData.uvs[1] = new Vector4(1f, 1f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+            meshData.uvs[2] = new Vector4(1f, 0f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+            meshData.uvs[3] = new Vector4(0f, 0f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
             //meshData.colors[0] = color;
             //meshData.colors[1] = color;
             //meshData.colors[2] = color;
@@ -248,10 +248,10 @@ namespace EasyGrass
                 meshData.normals[vOrigin + 1] = rotation * Vector3.up; 
                 meshData.normals[vOrigin + 2] = rotation * Vector3.forward;
                 meshData.normals[vOrigin + 3] = rotation * Vector3.forward;
-                meshData.uvs[vOrigin + 0] = new Vector4(0f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-                meshData.uvs[vOrigin + 1] = new Vector4(1f, 1f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-                meshData.uvs[vOrigin + 2] = new Vector4(1f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
-                meshData.uvs[vOrigin + 3] = new Vector4(0f, 0f, _unityDetailData.CullDistance, _unityDetailData.CullDistance);
+                meshData.uvs[vOrigin + 0] = new Vector4(0f, 1f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+                meshData.uvs[vOrigin + 1] = new Vector4(1f, 1f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+                meshData.uvs[vOrigin + 2] = new Vector4(1f, 0f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
+                meshData.uvs[vOrigin + 3] = new Vector4(0f, 0f, _grassDetailData.CullDistance, _grassDetailData.CullDistance);
                 //meshData.colors[vOrigin + 0] = color;
                 //meshData.colors[vOrigin + 1] = color;
                 //meshData.colors[vOrigin + 2] = color;
@@ -346,23 +346,23 @@ namespace EasyGrass
         {
             centerPos = GetRandPosition(centerPos, index);
             var normalizedPos = new Vector2(centerPos.x / _terrainSize.x, centerPos.y / _terrainSize.z);
-            //var terrainData = _massiveGrass.UnityTerrain.terrainData;
+            //var terrainData = _easyGrass.UnityTerrain.terrainData;
             //var height = terrainData.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
             var height = EasyGrassUtility.GetTerrainHeight(normalizedPos.x, normalizedPos.y,
-                _easyGrass.TerrainData.HeightmapResolution, _easyGrass.TerrainData.HeightmapResolution,
-                _easyGrass.TerrainData.TerrainSize.y);
+                _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution,
+                _easyGrass.GrassData.TerrainSize.y);
             //var normal = terrainData.GetInterpolatedNormal(normalizedPos.x, normalizedPos.y);
             var normal = EasyGrassUtility.GetTerrainNormal(normalizedPos.x, normalizedPos.y,
-                _easyGrass.TerrainData.HeightmapResolution, _easyGrass.TerrainData.HeightmapResolution);
-            float perlinNoise = Mathf.PerlinNoise(_terrainPos.x + centerPos.x * _unityDetailData.NoiseSpread,
-                _terrainPos.z + centerPos.y * _unityDetailData.NoiseSpread);
+                _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution);
+            float perlinNoise = Mathf.PerlinNoise(_terrainPos.x + centerPos.x * _grassDetailData.NoiseSpread,
+                _terrainPos.z + centerPos.y * _grassDetailData.NoiseSpread);
             Vector3 scale = Vector3.one;
-            scale.x = Mathf.Lerp(_unityDetailData.WidthScale.x, _unityDetailData.WidthScale.y, perlinNoise);
-            scale.y = Mathf.Lerp(_unityDetailData.HeightScale.x, _unityDetailData.HeightScale.y, perlinNoise);
+            scale.x = Mathf.Lerp(_grassDetailData.WidthScale.x, _grassDetailData.WidthScale.y, perlinNoise);
+            scale.y = Mathf.Lerp(_grassDetailData.HeightScale.x, _grassDetailData.HeightScale.y, perlinNoise);
             scale.z = scale.x;
 
             Element element = new Element(
-                new Vector3(centerPos.x, height + _unityDetailData.HeightOffset, centerPos.y),
+                new Vector3(centerPos.x, height + _grassDetailData.HeightOffset, centerPos.y),
                 normal,
                 scale);
             return element;
@@ -372,21 +372,21 @@ namespace EasyGrass
         {
             centerPos = GetRandPosition(centerPos, seed);
             var normalizedPos = new Vector2(centerPos.x / _terrainSize.x, centerPos.y / _terrainSize.z);
-            //var terrainData = _massiveGrass.UnityTerrain.terrainData;
+            //var terrainData = _easyGrass.UnityTerrain.terrainData;
             //var height = terrainData.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
             var height = EasyGrassUtility.GetTerrainHeight(normalizedPos.x, normalizedPos.y,
-                _easyGrass.TerrainData.HeightmapResolution, _easyGrass.TerrainData.HeightmapResolution,
-                _easyGrass.TerrainData.TerrainSize.y);
+                _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution,
+                _easyGrass.GrassData.TerrainSize.y);
             //var normal = terrainData.GetInterpolatedNormal(normalizedPos.x, normalizedPos.y);
             var normal = EasyGrassUtility.GetTerrainNormal(normalizedPos.x, normalizedPos.y,
-                _easyGrass.TerrainData.HeightmapResolution, _easyGrass.TerrainData.HeightmapResolution);
-            float perlinNoise = Mathf.PerlinNoise(_terrainPos.x + centerPos.x * _unityDetailData.NoiseSpread,
-                _terrainPos.z + centerPos.y * _unityDetailData.NoiseSpread);
+                _easyGrass.GrassData.HeightmapResolution, _easyGrass.GrassData.HeightmapResolution);
+            float perlinNoise = Mathf.PerlinNoise(_terrainPos.x + centerPos.x * _grassDetailData.NoiseSpread,
+                _terrainPos.z + centerPos.y * _grassDetailData.NoiseSpread);
             Vector3 scale = Vector3.one;
-            scale.x = Mathf.Lerp(_unityDetailData.WidthScale.x, _unityDetailData.WidthScale.y, perlinNoise);
-            scale.y = Mathf.Lerp(_unityDetailData.HeightScale.x, _unityDetailData.HeightScale.y, perlinNoise);
+            scale.x = Mathf.Lerp(_grassDetailData.WidthScale.x, _grassDetailData.WidthScale.y, perlinNoise);
+            scale.y = Mathf.Lerp(_grassDetailData.HeightScale.x, _grassDetailData.HeightScale.y, perlinNoise);
             scale.z = scale.x;
-            return Matrix4x4.TRS(new Vector3(centerPos.x, height + _unityDetailData.HeightOffset, centerPos.y),
+            return Matrix4x4.TRS(new Vector3(centerPos.x, height + _grassDetailData.HeightOffset, centerPos.y),
                 Quaternion.FromToRotation(Vector3.up, normal),
                 scale);
         }
