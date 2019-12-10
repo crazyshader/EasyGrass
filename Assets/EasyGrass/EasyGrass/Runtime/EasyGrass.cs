@@ -49,7 +49,7 @@ namespace EasyGrass
             Instance = this;
 
             var heightmapPath = Path.Combine(Application.streamingAssetsPath, _easyGrassData.HeightmapPath);
-            EasyGrassUtility.LoadHeightmap(heightmapPath, _easyGrassData.HeightmapResolution, _easyGrassData.HeightmapResolution);
+            StartCoroutine(EasyGrassUtility.LoadHeightmap(heightmapPath, _easyGrassData.HeightmapResolution, _easyGrassData.HeightmapResolution));
             //EasyGrassUtility.LoadHeightmap(_easyGrassData.HeightMap);
             EasyGrassUtility.LoadNormalmap(_easyGrassData.NormalMap);
 

@@ -25,7 +25,7 @@ namespace EasyGrass
         [SerializeField] public Material DetailMaterial;
     }
 
-    [CreateAssetMenu(menuName = "TerrainTextureExport/UnityTerrainData")]
+    [CreateAssetMenu(menuName = "EasyGrass/EasyGrassData")]
     public class EasyGrassData : ScriptableObject
     {
         [SerializeField] public bool InstanceDraw;

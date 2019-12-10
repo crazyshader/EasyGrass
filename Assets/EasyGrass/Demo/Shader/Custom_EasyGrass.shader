@@ -4,7 +4,7 @@
     {
         [HDR]_Tint ("Tint Color", Color) = (1,1,1,1)
         [NoScaleOffset] _MainTex ("Main Texture", 2D) = "white" {}
-		_AlphaClip ("Alpha Clip", Range(0,1)) = 0.5
+		_AlphaClip ("AlphaClip", Range(0,1)) = 0.5
 
 		_SizeScale("Size Scale", Range(0.1, 3)) = 1.0
 		_ShowRange("Show Range", Range(50, 200)) = 150
@@ -14,8 +14,8 @@
 		_HeightCutoff("Height Cutoff", Range(0, 1)) = 0.1
         _WindSpeed("Wind Speed", Range(1, 10)) = 1
 		[NoScaleOffset] _WindTex("Wind Texture", 2D) = "white" {}
-		//_TerrainPosition("Terrain  Position", vector) = (0, 0, 0, 1)
-        //_TerrainSize("Terrain  Size", vector) = (1, 1, 1, 1)
+		//_WorldPosition("World Position", vector) = (0, 0, 0, 1)
+        //_WorldSize("World Size", vector) = (1, 1, 1, 1)
 
     }
     SubShader
@@ -34,7 +34,7 @@
             #pragma fragment frag
             #pragma multi_compile_fog
 			#pragma multi_compile_instancing
-			//#pragma instancing_options forcemaxcount:513
+			//#pragma instancing_options forcemaxcount:512
 
             #include "UnityCG.cginc"
 
@@ -63,8 +63,8 @@
 
 			sampler2D _WindTex;
             float4 _WindTex_ST;
-			//float4 _TerrainPosition;
-            //float4 _TerrainSize;
+			//float4 _WorldPosition;
+            //float4 _WorldSize;
             float _WaveSpeed;
             float _WaveAmp;
             float _HeightFactor;
@@ -84,7 +84,7 @@
 				o.uv = v.uv;
 
 				//float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
-				//float2 samplePos = (worldPos.xz - _TerrainPosition.xz)/_TerrainSize.xz;
+				//float2 samplePos = (worldPos.xz - _WorldPosition.xz)/_WorldSize.xz;
                 //samplePos += _Time.x * _WindSpeed;
                 //float windSample = tex2Dlod(_WindTex, float4(samplePos, 0, 0));
 				float windSample = _Time.x * _WindSpeed;

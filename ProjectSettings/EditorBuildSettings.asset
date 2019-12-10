@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/EasyGrass/Demo/Scene/Demo.unity
+    guid: ae45ff065ed66c74da5379dd2858a99a
   m_configObjects: {}

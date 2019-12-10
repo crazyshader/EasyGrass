@@ -1,15 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.IO;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace EasyGrass
 {
     public class EasyGrassUtility
     {
         private static float[,] _heightmap;
-        static public float[,] LoadHeightmap(string filePath, int width, int height)
+        static public IEnumerator LoadHeightmap(string filePath, int width, int height)
         {
-            _heightmap = new float[height, width];
-            using (var file = System.IO.File.OpenRead(filePath))
-            using (var reader = new System.IO.BinaryReader(file))
+            void LoadHeightmap(BinaryReader reader)
             {
                 for (int y = 0; y < height; y++)
                 {
@@ -21,7 +22,35 @@ namespace EasyGrass
                 }
             }
 
-            return _heightmap;
+            _heightmap = new float[height, width];
+            if (filePath.Contains("://") || filePath.Contains(":///"))
+            {
+                UnityWebRequest www = UnityWebRequest.Get(filePath);
+                yield return www.SendWebRequest();
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.LogError($"LoadHeightmap:{www.error}");
+                }
+                else
+                {
+                    byte[] results = www.downloadHandler.data;
+                    using (var stream = new MemoryStream(results))
+                    using (var reader = new BinaryReader(stream))
+                    {
+                        LoadHeightmap(reader);
+                    }
+                }
+            }
+            else
+            {
+                using (var file = File.OpenRead(filePath))
+                using (var reader = new BinaryReader(file))
+                {
+                    LoadHeightmap(reader);
+                }
+            }
+
+            yield return null;
         }
 
         static public float[,] LoadHeightmap(Texture2D heightMap)
