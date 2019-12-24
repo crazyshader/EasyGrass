@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24a9d24656018e54d9232326b0d86bb7, type: 3}
+  m_Name: EasyGrassData
+  m_EditorClassIdentifier: 
+  InstanceDraw: 0
+  CullDistance: 100
+  DetailDensity: 0.5
+  MaxCountPerPatch: 1024
+  HeightmapResolution: 129
+  DetailResolution: 128
+  HeightDataPath: Test/HeightData.raw
+  DetailDataPath: Test/DetailData.raw
+  CellSize: {x: 32, y: 32}
+  TerrainPos: {x: 0, y: 0, z: 0}
+  TerrainSize: {x: 128, y: 200, z: 128}
+  DetailDataList:
+  - BrushIndex: 0
+    ShowDensity: 0.5
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.1
+    CastShadows: 0
+    ReceiveShadows: 0
+    WidthScale: {x: 1, y: 2}
+    HeightScale: {x: 1, y: 2}
+    UseQuad: 1
+    DetailMesh: {fileID: 0}
+    DetailMaterial: {fileID: 2100000, guid: 2252bb5242ead7648aec0ce649a02e70, type: 2}
+  - BrushIndex: 1
+    ShowDensity: 0.4
+    HeightOffset: 0
+    DetailLayer: 0
+    DetailThreshold: 0.2
+    CastShadows: 0
+    ReceiveShadows: 0
+    WidthScale: {x: 1, y: 2}
+    HeightScale: {x: 1, y: 2}
+    UseQuad: 1
+    DetailMesh: {fileID: 0}
+    DetailMaterial: {fileID: 2100000, guid: 4b5093f800e6ddf4d86d800f22a6ee7f, type: 2}

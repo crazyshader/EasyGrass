@@ -262,9 +262,9 @@ Terrain:
   m_SplatMapDistance: 1000
   m_HeightmapMaximumLOD: 0
   m_ShadowCastingMode: 2
-  m_DrawHeightmap: 1
+  m_DrawHeightmap: 0
   m_DrawInstanced: 0
-  m_DrawTreesAndFoliage: 1
+  m_DrawTreesAndFoliage: 0
   m_ReflectionProbeUsage: 1
   m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
   m_BakeLightProbesForTrees: 1
@@ -382,7 +382,12 @@ PrefabInstance:
     - target: {fileID: 6643863402601064505, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
         type: 3}
       propertyPath: m_Name
-      value: MassiveGrass
+      value: EasyGrass
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643863402601064505, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6643863402601064501, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
         type: 3}
@@ -444,5 +449,25 @@ PrefabInstance:
       propertyPath: _currentCamera
       value: 
       objectReference: {fileID: 1886675619}
+    - target: {fileID: 6306231512824258928, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6306231512824258928, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: _unityTerrain
+      value: 
+      objectReference: {fileID: 246777639}
+    - target: {fileID: 6306231512824258928, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: UnityBatch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6306231512824258928, guid: 3ca51c19c9c29b14ab9e66127e1baaf8,
+        type: 3}
+      propertyPath: _instanceDraw
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ca51c19c9c29b14ab9e66127e1baaf8, type: 3}

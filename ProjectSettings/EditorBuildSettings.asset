@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/EasyGrass/Demo/Scene/Demo.unity
-    guid: ae45ff065ed66c74da5379dd2858a99a
+    path: Assets/Test/EasyGrass_Test.unity
+    guid: 925bcfa0d71494e4e9f86c0c0e3cb3f2
   m_configObjects: {}

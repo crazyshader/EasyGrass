@@ -20,7 +20,7 @@
     }
     SubShader
     {
-        Tags { "RenderType"="TransparentCutout" "Queue"="AlphaTest" "DisableBatching" = "True"}
+        Tags { "RenderType"="TransparentCutout" "Queue"="AlphaTest"}
         LOD 100
 
         Pass
@@ -35,6 +35,7 @@
             #pragma multi_compile_fog
 			#pragma multi_compile_instancing
 			//#pragma instancing_options forcemaxcount:512
+			 #pragma instancing_options assumeuniformscaling
 
             #include "UnityCG.cginc"
 
@@ -126,7 +127,7 @@
 				clip(col.a - lerp(_AlphaClip, 1.0, fade));
 
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-				float ndl = dot(i.normal, lightDir) * 0.5 + 0.5;
+				float ndl = 1;//dot(i.normal, lightDir) * 0.5 + 0.5;
 				float3 finalColor = col.rgb * _LightColor0.rgb * ndl;
 
 				UNITY_APPLY_FOG(i.fogCoord, finalColor);

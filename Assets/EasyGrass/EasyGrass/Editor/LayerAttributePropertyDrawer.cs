@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using EasyFramework.Grass.Runtime;
 
-namespace EasyGrass
+namespace EasyFramework.Grass.Editor
 {
     [CustomPropertyDrawer(typeof(LayerAttribute))]
     class LayerAttributeEditor : PropertyDrawer
