@@ -38,6 +38,7 @@ namespace EasyFramework.Grass.Runtime
 
             for (int i = 0; i < _easyGrass.DetailCount; i++)
             {
+                _meshCountList[i] = 0;
                 _vertexList[i] = new NativeList<Vector3>(1024, Allocator.Persistent);
                 _uvList[i] = new NativeList<Vector2>(1024, Allocator.Persistent);
                 _triangleList[i] = new NativeList<int>(1024, Allocator.Persistent);
