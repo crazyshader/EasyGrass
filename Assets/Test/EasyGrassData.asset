@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a9d24656018e54d9232326b0d86bb7, type: 3}
   m_Name: EasyGrassData
   m_EditorClassIdentifier: 
-  InstanceDraw: 0
+  InstanceDraw: 1
   CullDistance: 100
   DetailDensity: 0.5
-  MaxCountPerPatch: 1024
+  MaxCountPerPatch: 4096
   HeightmapResolution: 129
   DetailResolution: 128
   HeightDataPath: Test/HeightData.raw
